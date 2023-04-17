@@ -1,16 +1,20 @@
-# This is a sample Python script.
+import AllStockMarketCodeLoader as allStockLoader
+import JudgeStockLE5DayMA as judgeStockHelper
+import baostock as bs
+import datetime
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# 登陆系统
+lg = bs.login()
 
+start_date = (datetime.datetime.now() - datetime.timedelta(days=20)).strftime('%Y-%m-%d')
+end_date = datetime.datetime.now().strftime('%Y-%m-%d')
+all_stock_list = allStockLoader.load()
+for index, stock in enumerate(all_stock_list):
+    code = stock[0]
+    # print(f'第{index}只， 股票代码是: {code}')
+    if code.startswith('sh') or code.startswith('sz'):
+        judgeStockHelper.judge3(stock[0], start_date, end_date, 7)
+        # print(stock)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# 登出系统
+bs.logout()
