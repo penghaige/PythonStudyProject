@@ -23,6 +23,9 @@ def judge5(code, start_date, end_date, days):
     # 判断是否符合条件
     if all(last_close >= last_ma5):
         print(f'{code}, 最近{days}天收盘价都不低于5日线')
+        return True
+    else:
+        return False
 
 
 def judge3(code, start_date, end_date, days):
@@ -45,6 +48,9 @@ def judge3(code, start_date, end_date, days):
     # 判断是否符合条件
     if all(last_close >= last_ma3):
         print(f'{code}, 最近{days}天收盘价都不低于3日线')
+        return True
+    else:
+        return False
 
 
 def test():
