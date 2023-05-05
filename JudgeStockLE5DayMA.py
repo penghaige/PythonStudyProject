@@ -28,17 +28,31 @@ def judge5(code, start_date, end_date, days):
         return False
 
 
-def judge3(code, start_date, end_date, days):
+def judge3(code, start_date, end_date, days, abs_pctChg):
     # 获取K线数据
     rs = bs.query_history_k_data_plus(code,
-                                      "date,close",
+                                      "date,close,tradestatus,amount,volume,pctChg",
                                       start_date=start_date,
                                       end_date=end_date,
                                       frequency="d",
                                       adjustflag="3")
     data_list = []
+    # 是否未停牌
+    is_normal_trade_status = True
+    is_large_than_abs_pct_chg = True
     while (rs.error_code == '0') & rs.next():
-        data_list.append(rs.get_row_data())
+        row_data = rs.get_row_data()
+        data_list.append(row_data)
+
+        if row_data[2] != '1':
+            is_normal_trade_status = False
+        pct_chg = row_data[5]
+        if abs_pctChg is not None and pct_chg is not None and pct_chg != '' and abs(float(pct_chg)) < abs_pctChg:
+            is_large_than_abs_pct_chg = False
+
+    if is_normal_trade_status is False or is_large_than_abs_pct_chg is False:
+        return False
+
     df = pd.DataFrame(data_list, columns=rs.fields)
     # 计算3日线和最近几天的收盘价
     df['close'] = df['close'].astype(float)
