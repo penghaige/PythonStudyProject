@@ -39,9 +39,10 @@ def judge(mode, code, start_date, end_date, days, abs_pctChg, average_abs_pctChg
         if row_data[2] != '1':
             is_normal_trade_status = False
 
+        if row_data[4] != '':
+            total_volume = total_volume + float(row_data[4])
+
         if less_than_average_len <= average_len:
-            if row_data[4] != '':
-                total_volume = total_volume + float(row_data[4])
             pct_chg = row_data[5]
             if pct_chg is not None and pct_chg != '':
                 abs_pct_chg = abs(float(pct_chg))
@@ -50,9 +51,9 @@ def judge(mode, code, start_date, end_date, days, abs_pctChg, average_abs_pctChg
                     is_large_than_abs_pct_chg = False
 
         less_than_average_len = less_than_average_len - 1
-
+    if len > 0:
+        average_volume = total_volume / len
     if average_len > 0:
-        average_volume = total_volume / average_len
         average_abs_pct_chg = total_abs_pct_chg / average_len
 
     if is_normal_trade_status is False or is_large_than_abs_pct_chg is False:
@@ -69,17 +70,16 @@ def judge(mode, code, start_date, end_date, days, abs_pctChg, average_abs_pctChg
         last_close = df.iloc[-days:]['close']
         last_ma3 = df.iloc[-days:]['ma3']
         last_volume = df.iloc[-average_len:]['volume']
-        last_pct_chg = df.iloc[-average_len:]['pctChg']
+        # last_pct_chg = df.iloc[-average_len:]['pctChg']
         for index, val in enumerate(last_volume.values):
-            if index >= len - average_len:
-                if float(val) < average_volume:
-                    is_large_than_average_volume = False
-                    break
-
-        for index, val in enumerate(last_pct_chg.values):
-            if abs(float(val)) < average_abs_pct_chg:
-                is_large_than_average_abs_pct_chg = False
+            if float(val) < average_volume:
+                is_large_than_average_volume = False
                 break
+
+        # for index, val in enumerate(last_pct_chg.values):
+        #     if abs(float(val)) < average_abs_pct_chg:
+        #         is_large_than_average_abs_pct_chg = False
+        #         break
 
         # 判断是否符合条件
         if is_large_than_average_volume and is_large_than_average_abs_pct_chg and all(last_close >= last_ma3):
@@ -94,16 +94,16 @@ def judge(mode, code, start_date, end_date, days, abs_pctChg, average_abs_pctChg
         last_close = df.iloc[-days:]['close']
         last_ma5 = df.iloc[-days:]['ma5']
         last_volume = df.iloc[-average_len:]['volume']
-        last_pct_chg = df.iloc[-average_len:]['pctChg']
+        # last_pct_chg = df.iloc[-average_len:]['pctChg']
         for index, val in enumerate(last_volume.values):
             if float(val) < average_volume:
                 is_large_than_average_volume = False
                 break
 
-        for index, val in enumerate(last_pct_chg.values):
-            if abs(float(val)) < average_abs_pct_chg:
-                is_large_than_average_abs_pct_chg = False
-                break
+        # for index, val in enumerate(last_pct_chg.values):
+        #     if abs(float(val)) < average_abs_pct_chg:
+        #         is_large_than_average_abs_pct_chg = False
+        #         break
 
         # 判断是否符合条件
         if is_large_than_average_volume and is_large_than_average_abs_pct_chg and all(last_close >= last_ma5):
