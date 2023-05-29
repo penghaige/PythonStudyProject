@@ -1,4 +1,4 @@
-capital = 147000  # 现有资金，单位为元
+capital = 140000  # 现有资金，单位为元
 init_capital = 340000  # 初始资金，单位为元
 position = 0.5  # 仓位为现有资金的一半
 profit_per_day = 1  # 每天盈利一个点

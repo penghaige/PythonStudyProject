@@ -15,7 +15,7 @@ for index, stock in enumerate(all_stock_list):
     code = stock[0]
     name = stock[2]
     if code.startswith('sh') or code.startswith('sz'):
-        result = judgeStockHelper.judge(3, stock[0], start_date, end_date, 2, None, 3)
+        result = judgeStockHelper.judge(3, stock[0], start_date, end_date, 3, 2, None, None)
         if result:
             print(f'第{index}只， 股票代码是: {code}, 股票名称是: {name}')
 
