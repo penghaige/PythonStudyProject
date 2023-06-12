@@ -63,7 +63,7 @@ def judge(mode, code, start_date, end_date, days, volume_radio, abs_pctChg, aver
     if 3 == mode:
         # 计算3日线和最近几天的收盘价和成交数量
         df['close'] = df['close'].astype(float)
-        df['volume'] = df['volume'].astype(float)
+        # df['volume'] = df['volume'].astype(float)
         df['ma3'] = df['close'].rolling(window=3).mean()
         last_close = df.iloc[-days:]['close']
         last_ma3 = df.iloc[-days:]['ma3']
@@ -72,7 +72,10 @@ def judge(mode, code, start_date, end_date, days, volume_radio, abs_pctChg, aver
         last_total_volume = 0
         last_average_volume = 0
         for index, val in enumerate(last_volume.values):
-            float_volume = float(val)
+            if val != '':
+                float_volume = float(val)
+            else:
+                float_volume = 0
             last_total_volume = last_total_volume + float_volume
 
         last_average_volume = last_total_volume / average_len
