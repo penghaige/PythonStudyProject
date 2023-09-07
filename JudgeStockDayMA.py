@@ -49,7 +49,7 @@ def judge(mode, code, start_date, end_date, days, volume_radio, abs_pctChg, aver
                 total_volume = total_volume + float(row_data[4])
 
         less_than_average_len = less_than_average_len - 1
-    if len > 0:
+    if len > 0 and len - average_len > 0:
         average_volume = total_volume / (len - average_len)
     if average_len > 0:
         average_abs_pct_chg = total_abs_pct_chg / average_len
@@ -110,7 +110,7 @@ def judge(mode, code, start_date, end_date, days, volume_radio, abs_pctChg, aver
 
         last_average_volume = last_total_volume / average_len
 
-        if volume_radio is not None and last_average_volume / average_volume < volume_radio:
+        if volume_radio is not None and average_volume != 0 and last_average_volume / average_volume < volume_radio:
             return False
 
         # for index, val in enumerate(last_pct_chg.values):
